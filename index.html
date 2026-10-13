@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
-<head>
+<head>gemini-2.5-flash
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sahabat Umroh HAQTOUR - Perjalanan Ibadah Amanah & Profesional</title>
@@ -493,7 +493,7 @@
 
     <!-- Chatbot Script Simulation -->
     <script>
-        function handleChat() {
+        async function handleChat() {
             const inputField = document.getElementById('user-input');
             const chatContainer = document.getElementById('chat-container');
             const userText = inputField.value.trim();
@@ -512,8 +512,28 @@
             inputField.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // Simulate AI Response after 1 second
-            setTimeout(() => {
+            // 
+    // Kirim pertanyaan ke backend Gemini
+    try {
+      const response = await fetch('http://localhost:3000/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userText })
+      });
+
+      const data = await response.json();
+      const aiBubble = document.createElement('div');
+      aiBubble.className = 'flex items-start space-x-3 text-slate-900';
+      aiBubble.innerHTML = `
+        <div class="bg-white text-slate-900 border border-slate-200 p-4 rounded-2xl max-w-lg text-sm">
+          ${escapeHtml(data.reply || data.error || 'Maaf, terjadi kendala.')}
+        </div>`;
+      chatContainer.appendChild(aiBubble);
+    } catch (error) {
+      alert('Backend belum terhubung. Pastikan Terminal 1 tetap berjalan.');
+    }
+
+        (() => {
                 const aiBubble = document.createElement('div');
                 aiBubble.className = 'flex items-start space-x-3';
                 aiBubble.innerHTML = `
